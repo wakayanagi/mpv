@@ -16,10 +16,9 @@ C:¥Users¥USERNAME¥AppData¥Roaming¥mpv¥
 
 ## Usage
 The LUA scripts included perform the following utility:
-
-plstat.lua: List media playlist in the Terminal OSD.  Invoked by 'c'.
-resize.lua: Instantaneously resize video width to 480px.  Inovked by 'y'.
-status.lua: Clear and rearrange the Terminal OSD for more succinct output.
+<br>plstat.lua: List media playlist in the Terminal OSD.  Invoked by 'c'.
+<br>resize.lua: Instantaneously resize video width to 480px.  Inovked by 'y'.
+<br>status.lua: Clear and rearrange the Terminal OSD for more succinct output.
 
 ## Tests
 All configuration files and scripts were written and tested within the OSX environment.  Files may work in other operating systems, but will have to be put into their respective folders.
