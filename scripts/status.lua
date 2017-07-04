@@ -36,14 +36,18 @@ function new_file()
   print("File: " .. fname)
 
   -- Output current file video statistics
-  local vwidth = mp.get_property("video-params/w")
-  local vheight = mp.get_property("video-params/h")
-  local vcodec = mp.get_property("video-codec")
-  local fps = math.floor((mp.get_property_native("fps")*10^2)+0.5)/(10^2)
-  print("Video: " .. vwidth .. "x" .. vheight .. "px @ " .. fps .. "fps"
-        .. "\n" .. vcodec)
+  if mp.get_property("vid") ~= "no" then
+    local vwidth = mp.get_property("video-params/w")
+    local vheight = mp.get_property("video-params/h")
+    local vcodec = mp.get_property("video-codec")
+    local fps = math.floor((mp.get_property_native("fps")*10^2)+0.5)/(10^2)
+    print("Video: " .. vwidth .. "x" .. vheight .. "px @ " .. fps .. "fps"
+          .. "\n" .. vcodec)
+  end
 
   -- Output current file audio statistics
-  print(mp.get_property("audio-codec"))
+  if mp.get_property("aid") ~= "no" then
+    print(mp.get_property("audio-codec"))
+  end
 end
 mp.register_event("file-loaded", new_file)
