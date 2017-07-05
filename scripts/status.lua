@@ -30,39 +30,48 @@ function update_msglvl(mod,val)
 end
 
 function get_media_stat()
-  -- Extract available video & audio statistics and output to terminal
+  -- Extract available file/video/audio statistics and output to terminal
+  local vidinf, audinf = "", ""
+
+  -- Display current playing file name
+  local current = mp.get_property_native("playlist-pos-1") - 1
+  local fname = mp.get_property("playlist/" .. current .. "/filename")
+  fname = "File: " .. string.match(fname, '[^/]-$') .. "\n"
 
   -- If video/image exists, extract video properties
   if mp.get_property("vid") ~= "no" then
     local vid = mp.get_property_native("video-out-params") 
     local vidd = mp.get_property_native("video-params")
-    print("Video: " .. mp.get_property("video-codec"))
-    print("Video: " .. vidd.w .. "x" .. vidd.h .. "px [" ..
-          vid.w .. "x" .. vid.h .. "px] " ..
-          "Aspect: " .. math.floor((vid.aspect*10^2)+0.5)/(10^2) ..
-          " [" .. vid.pixelformat .. "/" .. vid["plane-depth"] .. "bit]")
+
+    vidinf = "Video: " .. mp.get_property("video-codec") .. "\n" ..
+             "Video: " .. vidd.w .. "x" .. vidd.h .. "px [" ..
+             vid.w .. "x" .. vid.h .. "px] " ..
+             "Aspect: " .. math.floor((vid.aspect*10^2)+0.5)/(10^2) ..
+             " [" .. vid.pixelformat .. "/" .. vid["plane-depth"] ..
+             "bit]\n"
   end
 
   -- If audio exists, extract audio properties
   if mp.get_property("aid") ~= "no" then
     local aid = mp.get_property_native("audio-out-params")
-    print("Audio: " .. mp.get_property("audio-codec") .. " " ..
-          aid.samplerate .. "KHz [" .. aid.channels .. "]")
+    audinf = "Audio: " .. mp.get_property("audio-codec") .. " " ..
+             aid.samplerate .. "KHz [" .. aid.channels .. "]"
   end
+
+  -- Display the file name, video info and audio info in the Terminal OSD 
+  print(fname .. vidinf .. audinf)
 
   -- Enable term-osd / term-osd-bar after all status is printed
   update_msglvl("statusline", "status")
 end
 
 function new_file()
-  -- Output details of the newly loaded media file
+  -- List media stats when a new file is loaded
+  
+  -- Disable term-osd / term-osd-bar until file information is displayed
+  update_msglvl("statusline", "no")
 
-  -- Display current playing file name
-  local current = mp.get_property_native("playlist-pos-1") - 1
-  local fname = mp.get_property("playlist/" .. current .. "/filename")
-  print("File: " .. string.match(fname, '[^/]-$'))
-
-  -- Pull video / audio attributes just after media starts playing (250ms)
+  -- Pull file attributes just after media starts playing (250ms)
   mp.add_timeout(0.25, get_media_stat)
 end
 mp.register_event("file-loaded", new_file)
