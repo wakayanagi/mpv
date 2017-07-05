@@ -1,4 +1,4 @@
--- plstat.lua by Kuen -- 7/3/2017
+-- plstat.lua by Kuen -- 7/3/2017 | updated 7/5/2017
 -- A script to display the playlist of media that is queued up on mpv.
 -- Function is, by default, mapped to c.
 
@@ -25,9 +25,7 @@ function verbose_playlist() -- Output playlist to prompt
       fname = "Media File " .. i
     elseif string.find(fname, "/") then
       -- If file path exists, remove the path from the string
-      local shift = string.len(fname) - 
-                    string.find(string.reverse(fname), "/") + 1
-      fname = string.sub(fname, shift + 1, -1)
+      fname = string.match(fname, '[^/]-$')
     end
 
     -- Separate current file from the rest of the playlist
@@ -37,9 +35,7 @@ function verbose_playlist() -- Output playlist to prompt
     elseif i == current then
       curr_file = fname
     elseif i > current then
-      if i > current + 1 then
-        next_file = next_file .. "\n"
-      end
+      if i > current + 1 then next_file = next_file .. "\n" end
       next_file = next_file .. fname
     end
   end
