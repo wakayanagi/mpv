@@ -62,8 +62,8 @@ function new_file()
   local fname = mp.get_property("playlist/" .. current .. "/filename")
   print("File: " .. string.match(fname, '[^/]-$'))
 
-  -- Pull video / audio attributes just after media starts playing (50ms)
-  mp.add_timeout(0.05, get_media_stat)
+  -- Pull video / audio attributes just after media starts playing (250ms)
+  mp.add_timeout(0.25, get_media_stat)
 end
 mp.register_event("file-loaded", new_file)
 
