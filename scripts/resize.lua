@@ -1,37 +1,25 @@
 -- Script for instantaneous resize of the video window by
 -- rescaling the resolution of the playing video
--- Written 6/11/2016 by Kuen
+-- Written 6/11/2016 by Kuen | rewritten 7/6/2017
 
 require 'mp.options'
 
 local opt = {
-  width = 480,   -- Define with of resized window
+  width = 480,   -- Define with of resized window (px)
   key = "y",     -- Define mapping key
-  fltr = string.format(mp.get_script_name()),
+  fltr = mp.get_script_name():format(),
 }
 read_options(opt)
 
+function resize_video()
 -- Toggle window size based on defined width in opt.width
-function resizeVideo()
-  if deleteFilter(opt.fltr) == false then
-    mp.command(string.format("vf add @%s:scale=%s:-2",
-                              opt.fltr, opt.width))
-    mp.osd_message("")
-  elseif deleteFilter(opt.fltr) == true then
-  end
-end
+  
+  -- Toggle (add/del) scale filter to vf for realtime scaling
+  local resize_fltr = string.format("@%s:scale=%s:-2", opt.fltr, opt.width)
+  mp.commandv("vf", "toggle", resize_fltr)
 
--- Cycle through video filters to delete target label
-function deleteFilter(label)
-  local vfs = mp.get_property_native("vf")
-  for i, vf in pairs(vfs) do
-    if vf["label"] == label then
-      table.remove(vfs, i)
-      mp.set_property_native("vf", vfs)
-      return true
-    end
-  end
-  return false
+  -- OSD message to update new video size
+  local vid = mp.get_property_native("video-out-params")
+  mp.osd_message("[" .. vid.dw .. "x" .. vid.dh .. "px]")
 end
-
-mp.add_key_binding(opt.key, "resize", resizeVideo)
+mp.add_key_binding(opt.key, "resize", resize_video)

@@ -39,20 +39,20 @@ function get_media_stat()
   fname = "File: " .. string.match(fname, '[^/]-$') .. "\n"
 
   -- If video/image exists, extract video properties
-  if mp.get_property("vid") ~= "no" then
+  if mp.get_property_native("vid") == 1 then
     local vid = mp.get_property_native("video-out-params") 
     local vidd = mp.get_property_native("video-params")
 
     vidinf = "Video: " .. mp.get_property("video-codec") .. "\n" ..
              "Video: " .. vidd.w .. "x" .. vidd.h .. "px [" ..
-             vid.w .. "x" .. vid.h .. "px] " ..
+             vid.dw .. "x" .. vid.dh .. "px] " ..
              "Aspect: " .. math.floor((vid.aspect*10^2)+0.5)/(10^2) ..
              " [" .. vid.pixelformat .. "/" .. vid["plane-depth"] ..
              "bit]\n"
   end
 
   -- If audio exists, extract audio properties
-  if mp.get_property("aid") ~= "no" then
+  if mp.get_property_native("aid") == 1 then
     local aid = mp.get_property_native("audio-out-params")
     audinf = "Audio: " .. mp.get_property("audio-codec") .. " " ..
              aid.samplerate .. "KHz [" .. aid.channels .. "]"
