@@ -42,12 +42,14 @@ function get_media_stat()
   if mp.get_property_native("vid") == 1 then
     local vid = mp.get_property_native("video-out-params") 
     local vidd = mp.get_property_native("video-params")
+    local fps = mp.get_property_native("estimated-vf-fps")
 
     vidinf = "Video: " .. mp.get_property("video-codec") .. "\n" ..
-             "Video: " .. vidd.w .. "x" .. vidd.h .. "px [" ..
-             vid.dw .. "x" .. vid.dh .. "px] " ..
-             "Aspect: " .. math.floor((vid.aspect*10^2)+0.5)/(10^2) ..
-             " [" .. vid.pixelformat .. "/" .. vid["plane-depth"] ..
+             vidd.w .. "x" .. vidd.h .. "px [" .. vid.dw .. "x" ..
+             vid.dh .. "px] " ..
+             "Aspect:" .. math.floor((vid.aspect*10^2)+0.5)/(10^2) ..
+             " " .. math.floor((fps*10^2)+0.5)/(10^2) ..
+             "fps [" .. vid.pixelformat .. "/" .. vid["plane-depth"] ..
              "bit]\n"
   end
 
