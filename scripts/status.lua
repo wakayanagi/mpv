@@ -44,14 +44,14 @@ function get_media_stat()
     local vparam = mp.get_property_native("video-params")
     local fps = mp.get_property_native("estimated-vf-fps")
     -- If fps property is not updated fast enough, ignore fps
-    if fps == nil then fps = "" end
+    if fps == nil then fps = 0 end
 
     vidinf = "Video: " .. mp.get_property("video-codec") .. "\n" ..
              vparam.w .. "x" .. vparam.h .. "px [" .. vout.dw .. "x" ..
              vout.dh .. "px] " ..
              "Aspect:" .. math.floor((vout.aspect*10^2)+0.5)/(10^2) ..
              " " .. math.floor((fps*10^2)+0.5)/(10^2) ..
-             "fps [" .. vout.pixelformat .. "/" .. vout["plane-depth"] ..
+             "fps [" .. vout.pixelformat .. 
              "bit]\n"
   end
 
